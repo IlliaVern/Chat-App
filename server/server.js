@@ -14,7 +14,13 @@ app.use(express.static(publicPath))
 
 io.on('connection', (socket) => {
     console.log('A new user just connected')
+
+    socket.on('disconnect', () => {
+      console.log('User was disconnected.')
+    })
 })
+
+
 
 server.listen(3000, () => {
     console.log(`Server is up on port ${port}`)
