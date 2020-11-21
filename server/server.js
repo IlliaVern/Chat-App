@@ -13,15 +13,41 @@ const io = socketIO(server)
 app.use(express.static(publicPath))
 
 io.on('connection', (socket) => {
-    console.log('A new user just connected')
+  console.log('A new user just connected')
 
-    socket.on('disconnect', () => {
-      console.log('User was disconnected.')
+  socket.emit('newMessage', {
+      from: 'Admin',
+      text: 'Welcome to Chat-App!!!',
+      createdAt: new Date()
+  })
+
+  socket.broadcast.emit('newMessage', {
+    from: 'Admin',
+    text: 'New user joined',
+    createdAt: new Date()
+  })
+
+
+  socket.on('createMessage', (message) => {
+    console.log('Create message', message)
+
+    io.emit('newMessage', {
+      from: message.from,
+      text: message.text,
+      createdAt: new Date()
     })
+    // socket.broadcast.emit('newMessage', {
+    //   from: message.from,
+    //   text: message.text,
+    //   createdAt: new Date()
+    // })
+  })
+
+  socket.on('disconnect', () => {
+    console.log('User was disconnected.')
+  })
 })
 
-
-
 server.listen(3000, () => {
-    console.log(`Server is up on port ${port}`)
+  console.log(`Server is up on port ${port}`)
 })
