@@ -31,12 +31,16 @@ socket.on('newLocationMessage', (message) => {
 document.querySelector('#submit-btn').addEventListener('click', (e) => {
   e.preventDefault()
 
+  const inputMessage = document.querySelector('input[name="message"]')
+
   socket.emit('createMessage', {
     from: 'User',
-    text: document.querySelector('input[name="message"]').value
+    text: inputMessage.value
   }, () => {
 
   })
+
+  inputMessage.value = ''
 })
 
 document.querySelector('#send-location').addEventListener('click', (e) => {
